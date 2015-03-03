@@ -44,11 +44,61 @@ static const int GRID_COLS = 10;
             [self addChild:creature];
             
             _gridArray[i][j] = creature;
-            creature.isAlive = YES;
+            
             x+=_cellWidth;
         }
         y+=_cellHeight;
     }
+}
+
+-(void)touchBegan:(CCTouch *)touch withEvent:(CCTouchEvent *)event{
+    CGPoint touchLocation = [touch locationInNode:self];
+    
+    Creature *creature = [self creatureForTouchPosition:touchLocation];
+    
+    creature.isAlive = !creature.isAlive;
+}
+
+-(Creature*)creatureForTouchPosition:(CGPoint)touchPosition{
+    
+}
+
+-(void)evolveStep{
+    [self countNeighbors];
+    [self updateCreatures];
+    
+    _generation++;
+}
+
+-(void)countNeighbors{
+    for (int i=0; i <[_gridArray count]; i++) {
+        for (int j=0; j<[_gridArray[i] count]; j++) {
+            Creature *currentCreture = _gridArray[i][j];
+            currentCreture.livingNeighbors = 0;
+            
+            for (int x = (i-1); x<=(i+1); x++) {
+                for (int y = (j-1); j <= (j+1); y++) {
+                    BOOL isIndexValid;
+                    isIndexValid = [self isIndexValidForX:x andY:y];
+                    
+                    if (!((x==i) && (y==j)) && isIndexValid) {
+                        Creature *neighbor = _gridArray[x][y];
+                        if (neighbor.isAlive) {
+                            currentCreture.livingNeighbors +=1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+-(BOOL)isIndexValidForX:(int)x andY:(int)y{
+    BOOL isIndexValid = YES;
+    if (x<0||y<0||x>=GRID_ROWS||y>=GRID_COLS) {
+        isIndexValid = NO;
+    }
+    return isIndexValid;
 }
 
 @end
