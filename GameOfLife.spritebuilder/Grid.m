@@ -93,6 +93,21 @@ static const int GRID_COLS = 10;
     }
 }
 
+-(void)updateCreatures{
+    for (int i=0; i <[_gridArray count]; i++) {
+        for (int j=0; j<[_gridArray[i] count]; j++) {
+            Creature *currentCreature = _gridArray[i][j];
+            if (currentCreature.livingNeighbors == 3) {
+                currentCreature.isAlive = TRUE;
+            }
+            if(currentCreature.livingNeighbors <=1 || currentCreature.livingNeighbors >=4)
+            {
+                currentCreature.isAlive = FALSE;
+            }
+        }
+    }
+}
+
 -(BOOL)isIndexValidForX:(int)x andY:(int)y{
     BOOL isIndexValid = YES;
     if (x<0||y<0||x>=GRID_ROWS||y>=GRID_COLS) {
