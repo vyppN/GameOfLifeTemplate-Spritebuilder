@@ -79,7 +79,7 @@ static const int GRID_COLS = 10;
             currentCreture.livingNeighbors = 0;
             
             for (int x = (i-1); x<=(i+1); x++) {
-                for (int y = (j-1); j <= (j+1); y++) {
+                for (int y = (j-1); y <= (j+1); y++) {
                     BOOL isIndexValid;
                     isIndexValid = [self isIndexValidForX:x andY:y];
                     
